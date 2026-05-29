@@ -21,7 +21,7 @@ public class PedidoTest {
 
     @BeforeEach
     void setUp() {
-        cliente = new Cliente("Adrian Blas", "adrian@email.com", "Calle Mayor 1");
+        cliente = new Cliente("CL-01", "Adrian Blas", "adrian@email.com", "España", 0, false);
     }
 
     // ===================== PEDIDO =====================
@@ -31,15 +31,15 @@ public class PedidoTest {
     void testTotalConProductoFisico() {
         Pedido pedido = new Pedido(cliente);
         pedido.agregarProducto(new ProductoFisico("Teclado", 100.0, 5.0));
-        assertEquals(126.0, pedido.calcularTotal(), 0.001);
+        assertEquals(110.0, pedido.calcularTotalPedido(), 0.001);
     }
 
     @Test
     @DisplayName("TC-PE-02: calcularTotal con un ProductoDigital")
     void testTotalConProductoDigital() {
         Pedido pedido = new Pedido(cliente);
-        pedido.agregarProducto(new ProductoDigital("Software", 200.0, "LIC-1", 0.10));
-        assertEquals(180.0, pedido.calcularTotal(), 0.001);
+        pedido.agregarProducto(new ProductoDigital("Software", 200.0, "LIC-1"));
+        assertEquals(242.0, pedido.calcularTotalPedido(), 0.001);
     }
 
     @Test
@@ -47,15 +47,15 @@ public class PedidoTest {
     void testTotalConProductosMixtos() {
         Pedido pedido = new Pedido(cliente);
         pedido.agregarProducto(new ProductoFisico("Ratón", 50.0, 0.0));
-        pedido.agregarProducto(new ProductoDigital("App", 100.0, "A1", 0.0));
-        assertEquals(160.5, pedido.calcularTotal(), 0.001);
+        pedido.agregarProducto(new ProductoDigital("App", 100.0, "A1"));
+        assertEquals(171.0, pedido.calcularTotalPedido(), 0.001);
     }
 
     @Test
     @DisplayName("TC-PE-04: Pedido vacío tiene total cero")
     void testTotalPedidoVacio() {
         Pedido pedido = new Pedido(cliente);
-        assertEquals(0.0, pedido.calcularTotal(), 0.001);
+        assertEquals(0.0, pedido.calcularTotalPedido(), 0.001);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class PedidoTest {
     void testAgregarProductoNullNoLanzaExcepcion() {
         Pedido pedido = new Pedido(cliente);
         assertDoesNotThrow(() -> pedido.agregarProducto(null));
-        assertEquals(0.0, pedido.calcularTotal(), 0.001);
+        assertEquals(0.0, pedido.calcularTotalPedido(), 0.001);
     }
 
     @Test
@@ -71,15 +71,15 @@ public class PedidoTest {
     void testTotalConProductoNoEsCero() {
         Pedido pedido = new Pedido(cliente);
         pedido.agregarProducto(new ProductoFisico("Monitor", 200.0, 15.0));
-        assertNotEquals(0.0, pedido.calcularTotal());
+        assertNotEquals(0.0, pedido.calcularTotalPedido());
     }
 
     @Test
     @DisplayName("TC-PE-07: Total no es negativo")
     void testTotalNuncaEsNegativo() {
         Pedido pedido = new Pedido(cliente);
-        pedido.agregarProducto(new ProductoDigital("Tool", 30.0, "T1", 0.5));
-        assertFalse(pedido.calcularTotal() < 0);
+        pedido.agregarProducto(new ProductoDigital("Tool", 30.0, "T1"));
+        assertFalse(pedido.calcularTotalPedido() < 0);
     }
 
     @Test
@@ -97,24 +97,24 @@ public class PedidoTest {
         assertTrue(pedido.mostrarResumen().contains("Teclado"));
     }
 
-    @ParameterizedTest(name = "PrecioF={0}, EnvioF={1}, PrecioD={2}, DescD={3} => Total={4}")
+    @ParameterizedTest(name = "PrecioF={0}, EnvioF={1}, PrecioD={2} => Total={3}")
     @CsvSource({
-        "100.0, 5.0,  0.0,  0.0,  126.0",
-        "0.0,   0.0, 200.0, 0.10, 180.0",
-        "100.0, 5.0, 100.0, 0.0,  226.0",
-        "50.0,  3.0,  50.0, 0.5,   88.5",
-        "0.0,   0.0,   0.0, 0.0,    0.0"
+        "100.0, 5.0,   0.0, 110.0",
+        "0.0,   0.0,  200.0, 242.0",
+        "100.0, 5.0,  100.0, 231.0",
+        "50.0,  3.0,   50.0, 116.5",
+        "0.0,   0.0,    0.0,   0.0"
     })
     @DisplayName("TC-PE-09: calcularTotal parametrizado")
     void testCalcularTotalParametrizado(double precioF, double envioF,
-                                        double precioD, double descD,
+                                        double precioD,
                                         double esperado) {
         Pedido pedido = new Pedido(cliente);
         if (precioF > 0 || envioF > 0)
             pedido.agregarProducto(new ProductoFisico("Físico", precioF, envioF));
         if (precioD > 0)
-            pedido.agregarProducto(new ProductoDigital("Digital", precioD, "LIC", descD));
-        assertEquals(esperado, pedido.calcularTotal(), 0.001);
+            pedido.agregarProducto(new ProductoDigital("Digital", precioD, "LIC"));
+        assertEquals(esperado, pedido.calcularTotalPedido(), 0.001);
     }
 
     // ===================== CLIENTE =====================
@@ -132,12 +132,12 @@ public class PedidoTest {
     }
 
     @Test
-    @DisplayName("TC-CL-03: toString de cliente contiene los tres campos")
+    @DisplayName("TC-CL-03: toString de cliente contiene los tres campos principales")
     void testClienteToString() {
         String resultado = cliente.toString();
         assertTrue(resultado.contains("Adrian Blas"));
         assertTrue(resultado.contains("adrian@email.com"));
-        assertTrue(resultado.contains("Calle Mayor 1"));
+        assertTrue(resultado.contains("CL-01"));
     }
 
     @Test
@@ -156,15 +156,15 @@ public class PedidoTest {
     }
 
     @Test
-    @DisplayName("TC-CL-06: setDireccion actualiza la dirección")
-    void testSetDireccion() {
-        cliente.setDireccion("Calle Nueva 99");
-        assertEquals("Calle Nueva 99", cliente.getDireccion());
+    @DisplayName("TC-CL-06: setPais actualiza el país")
+    void testSetPais() {
+        cliente.setPais("Francia");
+        assertEquals("Francia", cliente.getPais());
     }
 
     @Test
-    @DisplayName("TC-CL-07: getDireccion devuelve la dirección correcta")
-    void testGetDireccion() {
-        assertEquals("Calle Mayor 1", cliente.getDireccion());
+    @DisplayName("TC-CL-07: getPais devuelve el país correcto")
+    void testGetPais() {
+        assertEquals("España", cliente.getPais());
     }
 }

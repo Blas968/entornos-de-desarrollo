@@ -1,0 +1,1 @@
+mvn clean verify sonar:sonar -Dsonar.token=sqp_b523306955668a7fa98c36bd88a2a1df51fcc7e5

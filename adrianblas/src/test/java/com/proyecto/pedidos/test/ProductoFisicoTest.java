@@ -1,6 +1,10 @@
 package com.proyecto.pedidos.test;
 
+import com.proyecto.pedidos.model.Cliente;
+import com.proyecto.pedidos.model.Pedido;
+import com.proyecto.pedidos.model.ProductoDigital;
 import com.proyecto.pedidos.model.ProductoFisico;
+
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

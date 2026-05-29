@@ -1,4 +1,5 @@
 package com.proyecto.pedidos.model;
+
 /**
  * Producto descargable o virtual que no requiere envío físico.
  * El precio final se calcula aplicando IVA al precio base.

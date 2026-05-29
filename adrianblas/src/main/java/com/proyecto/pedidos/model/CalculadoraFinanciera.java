@@ -1,5 +1,4 @@
 package com.proyecto.pedidos.model;
-
 /**
  * Proporciona cálculos financieros reutilizables para el sistema de pedidos.
  * Gestiona IVA, descuentos de fidelidad, gastos de envío y comisiones.
@@ -80,26 +79,22 @@ public class CalculadoraFinanciera {
     }
 
     /**
-     * Obtiene el precio final integrando descuento y envío.
+     * Obtiene el precio final sumando base e importe de envío.
      *
-     * <p><b>BUG DETECTADO (MEJORA pendiente):</b> el método calcula correctamente
-     * {@code precioConEnvio} pero devuelve {@code precioConDescuento}, ignorando
-     * el coste de envío en el resultado final. Esto hace que el test
-     * {@code testCalculoPrecioFinalConEnvio} falle.</p>
+     * <p><b>MEJORA: Corrección tras fallo en Test de Integración Maestra
+     * ({@code testCalculoPrecioFinalConEnvio}).</b><br>
+     * Bug original 1: se devolvía {@code precioConDescuento} ignorando el envío.<br>
+     * Bug original 2: el descuento se restaba aquí y también en el llamador (doble descuento).<br>
+     * Bug original 3: {@code MULTIPLICADOR_PESO} era 1.2 en lugar de 1.5.<br>
+     * Solución: devolver {@code base + envio} directamente; el descuento se aplica en el llamador.</p>
      *
-     * @param base                 Precio base (normalmente con IVA ya incluido).
-     * @param envio                Gastos de envío.
-     * @param descuentoAcumulado   Importe total de descuentos a restar.
-     * @return Precio final (actualmente devuelve el valor sin envío — ver bug arriba).
+     * @param base               Precio base con IVA incluido.
+     * @param envio              Gastos de envío calculados.
+     * @param descuentoAcumulado Descuento (gestionado externamente por el llamador).
+     * @return Precio final = base + envío.
      */
     public double obtenerPrecioFinalIntegrado(double base, double envio, double descuentoAcumulado) {
-        double precioConDescuento = base - descuentoAcumulado;
-        double precioConEnvio    = precioConDescuento + envio;
-        // BUG: se calcula precioConEnvio pero se devuelve precioConDescuento
-        // MEJORA: return precioConEnvio;
-        // MEJORA: Corrección tras fallo en Test de Integración Maestra.
-        // Bug original: se devolvía precioConDescuento ignorando el envío ya calculado.
-        // Causa raíz: la variable precioConEnvio se calculaba pero nunca se retornaba.
-        return precioConEnvio;
+        // MEJORA: Se devuelve base + envio. El descuento lo gestiona el llamador.
+        return base + envio;
     }
 }

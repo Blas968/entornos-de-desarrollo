@@ -1,4 +1,5 @@
 package com.proyecto.pedidos.model;
+
 /**
  * Producto tangible que requiere envío físico.
  * El precio final se calcula sumando al precio base el coste

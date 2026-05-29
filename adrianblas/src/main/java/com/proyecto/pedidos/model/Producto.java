@@ -1,5 +1,4 @@
-package com.example.project;
-
+package com.proyecto.pedidos.model;
 /**
  * Clase abstracta base que representa cualquier producto del sistema.
  * Define los atributos comunes y obliga a las subclases a implementar

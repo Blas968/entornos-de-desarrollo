@@ -97,7 +97,7 @@ public class Pedido {
         for (Producto p : productos) {
             sb.append(" - ").append(p.toString()).append("\n");
         }
-        sb.append(String.format("Total: %.2f€\n", calcularTotalPedido()));
+        sb.append(String.format("Total: %.2f€%n", calcularTotalPedido()));
         return sb.toString();
     }
 

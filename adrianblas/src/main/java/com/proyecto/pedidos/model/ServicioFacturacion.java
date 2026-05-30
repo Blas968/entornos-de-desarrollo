@@ -1,12 +1,15 @@
 package com.proyecto.pedidos.model;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 /**
  * Orquesta el proceso completo de facturación integrando
  * el inventario y los cálculos financieros.
  */
 public class ServicioFacturacion {
+
+    private static final Logger LOGGER = Logger.getLogger(ServicioFacturacion.class.getName());
 
     private GestorInventario    inventario;
     private CalculadoraFinanciera calculadora;
@@ -80,6 +83,6 @@ public class ServicioFacturacion {
      * @param id Código de la factura a archivar.
      */
     public void archivarFactura(String id) {
-        System.out.println("Documento " + id + " almacenado.");
+        LOGGER.info(() -> "Documento " + id + " almacenado.");
     }
 }

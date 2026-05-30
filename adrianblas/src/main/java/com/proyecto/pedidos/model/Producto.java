@@ -16,7 +16,7 @@ public abstract class Producto {
      * @param precioBase Precio base sin impuestos ni extras.
      * @throws IllegalArgumentException si el precio es negativo.
      */
-    public Producto(String nombre, double precioBase) {
+    protected Producto(String nombre, double precioBase) {
         if (precioBase < 0) {
             throw new IllegalArgumentException("El precio no puede ser negativo");
         }

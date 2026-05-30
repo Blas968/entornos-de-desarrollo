@@ -66,18 +66,19 @@ public class Factura {
      */
     public String generarDesglose() {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        return String.format(
-            "═══════════════════════════════════\n" +
-            "  FACTURA: %s\n" +
-            "  Fecha:   %s\n" +
-            "═══════════════════════════════════\n" +
-            "  Base neta:       %8.2f €\n" +
-            "  IVA:             %8.2f €\n" +
-            "  Envío:           %8.2f €\n" +
-            "  Descuento:      -%8.2f €\n" +
-            "───────────────────────────────────\n" +
-            "  TOTAL FINAL:     %8.2f €\n" +
-            "═══════════════════════════════════\n",
+        return String.format("""
+            ═══════════════════════════════════
+              FACTURA: %s
+              Fecha:   %s
+            ═══════════════════════════════════
+              Base neta:       %8.2f €
+              IVA:             %8.2f €
+              Envío:           %8.2f €
+              Descuento:      -%8.2f €
+            ───────────────────────────────────
+              TOTAL FINAL:     %8.2f €
+            ═══════════════════════════════════
+            """,
             codigoFactura, fechaEmision.format(fmt),
             totalNeto, totalIva, totalEnvio, totalDescuento, totalFinal
         );
